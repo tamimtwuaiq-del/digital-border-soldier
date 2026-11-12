@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#080e14">
+<meta name="description" content="مبادرة تعرّف المواطن السعودي بأساليب الهجوم على وسائل التواصل الاجتماعي، وتقترح خططًا دفاعية فعّالة.">
+<title>جندي على الحدود الرقمية</title>
+<style>
+:root {
+  color-scheme: dark;
+  --bg: #080e14;
+  --line: #273c4b;
+  --ink: #061218;
+  --text: #edf8fc;
+  --muted: #b3c7d3;
+  --cyan: #75e5e2;
+  --green: #abe0ad;
+  --red: #ff838e;
+  font-family: Tahoma, Arial, sans-serif;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 74px; }
+body { margin: 0; color: var(--text); background: var(--bg); line-height: 1.8; isolation: isolate; }
+a { color: inherit; text-decoration: none; }
+a:focus-visible { outline: 2px solid var(--cyan); outline-offset: 4px; }
+header {
+  position: fixed; inset: 0 0 auto; z-index: 5;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding: 12px max(5vw, 20px); background: #080e14f5; border-bottom: 1px solid var(--line);
+}
+.brand { font-weight: bold; font-size: .92rem; }
+.brand::before {
+  content: ""; display: inline-block; width: 9px; height: 9px;
+  background: var(--cyan); margin-inline-end: 9px; transform: rotate(45deg);
+}
+nav { display: flex; gap: clamp(10px, 2vw, 26px); color: var(--muted); font-size: .82rem; }
+nav a { padding-block: 5px; white-space: nowrap; }
+nav a:hover, nav a[aria-current] { color: var(--cyan); }
+.progress {
+  position: fixed; z-index: 6; inset: 0 0 auto; height: 3px; background: var(--cyan);
+  width: 100%; transform: scaleX(var(--scroll, 0)); transform-origin: right;
+}
+/* One shared light field across the entire page. */
+.backdrop { position: fixed; z-index: -1; inset: 0; overflow: hidden; pointer-events: none; }
+.ambient {
+  position: absolute; inset: -24%; transform: translate3d(var(--drift-x, 0px), var(--drift-y, 0px), 0);
+  background:
+    radial-gradient(ellipse at 44% 32%, #1a4b5b 0%, transparent 49%),
+    radial-gradient(ellipse at 82% 74%, #193041 0%, transparent 47%);
+  animation: open-light 4.5s both ease-out;
+}
+@keyframes open-light {
+  from { opacity: .48; scale: 1.12; }
+  to { opacity: 1; scale: 1; }
+}
+.ambient::before, .ambient::after {
+  position: absolute; inset: 0; content: ""; opacity: 0; transition: opacity .8s ease;
+}
+.ambient::before { background: radial-gradient(ellipse at 72% 53%, #722431 0%, transparent 57%); }
+.ambient::after { background: radial-gradient(ellipse at 67% 52%, #185c40 0%, transparent 57%); }
+body[data-tone="problem"] .ambient::before,
+body[data-tone="solution"] .ambient::after { opacity: .9; }
+.backdrop::after {
+  position: absolute; inset: 0; content: "";
+  background-image: radial-gradient(#9cdae821 1px, transparent 1px);
+  background-size: 21px 21px; mask-image: linear-gradient(#000, transparent);
+}
+.slide { padding: clamp(48px, 8vw, 110px) max(6vw, 22px); }
+.wrap { max-width: 1080px; width: 100%; margin: 0 auto; }
+#intro { padding-top: clamp(140px, 16vw, 230px); padding-bottom: clamp(65px, 10vw, 140px); }
+.hero { text-align: center; }
+#problem h2 { color: var(--red); }
+#solution :is(h2, h3) { color: var(--green); }
+h1, h2, h3, p { margin: 0; }
+h1 { font-size: clamp(2.15rem, 6.3vw, 5.65rem); line-height: 1.2; text-wrap: balance; }
+h1 strong { color: var(--cyan); }
+h2 { font-size: clamp(2.1rem, 5vw, 3.85rem); line-height: 1.2; margin: 0 0 21px; }
+h3 { font-size: 1.15rem; margin-bottom: 7px; }
+.lead { font-size: clamp(1.08rem, 1.9vw, 1.33rem); color: var(--text); max-width: 62ch; }
+.hero .lead { margin: 21px auto 0; color: var(--muted); text-wrap: balance; }
+.article-34 {
+  margin: 35px auto 0; padding-top: 20px; max-width: 68ch;
+  border-top: 1px solid #ffffff24; font-size: clamp(.95rem, 1.6vw, 1.1rem);
+}
+.article-34 span { display: block; margin-top: .6em; }
+#problem-opening { max-width: 53ch; font-size: clamp(1.15rem, 2.5vw, 1.8rem); }
+.detail-list { display: grid; gap: 25px; margin-top: 24px; max-width: 67ch; }
+.detail-list p { color: var(--muted); font-size: 1rem; }
+.detail-list h3 { color: var(--cyan); }
+.award { color: #ffddb1; margin-top: 27px; max-width: 67ch; }
+.steps { display: grid; gap: 10px; margin: 19px 0 0; padding: 0; list-style: none; }
+.steps li {
+  display: grid; grid-template-columns: 38px 1fr; gap: 13px; align-items: start;
+  padding: 7px 0; color: var(--muted);
+}
+.steps strong { display: block; color: var(--text); }
+.steps span { color: var(--cyan); font-weight: bold; }
+#closing {
+  display: grid; align-items: center; min-height: 100svh;
+  padding-block: clamp(64px, 11vw, 150px); text-align: center;
+}
+.closing-title {
+  margin: 0 auto; font-size: clamp(1.45rem, 4.4vw, 3.3rem);
+  line-height: 1.36; text-wrap: balance;
+}
+.closing-title span, .closing-title strong { display: block; }
+.closing-title .closing-topics {
+  margin-top: .65em; color: var(--muted); font-size: .57em; font-weight: normal;
+}
+.closing-title strong { margin-top: .43em; color: var(--cyan); }
+.meyar-cta {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: min(100%, 620px); min-height: 60px; margin-top: 36px; padding: 12px 22px;
+  color: var(--ink); font-size: clamp(1rem, 2vw, 1.25rem); font-weight: bold;
+  background: #b9ffce; border: 1px solid #d9ffe4; border-radius: 6px;
+  box-shadow: 0 0 22px #74f7a36b, 0 0 55px #74f7a337;
+  transition: background .2s ease, box-shadow .2s ease;
+}
+.meyar-cta:is(:hover, :focus-visible) {
+  background: #d0ffdd; box-shadow: 0 0 30px #74f7a39a, 0 0 70px #74f7a34c;
+}
+@media (max-width: 720px) {
+  header { display: block; padding: 8px 16px; }
+  .brand { display: block; }
+  nav { gap: 15px; overflow-x: auto; }
+  html { scroll-padding-top: 88px; }
+  .slide { padding-inline: 22px; }
+  .hero .lead { margin-top: 13px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .ambient { animation: none; transform: none; }
+  .ambient::before, .ambient::after { transition: none; }
+  .meyar-cta { transition: none; }
+}
+</style>
+</head>
+<body>
+<div class="backdrop" aria-hidden="true"><div class="ambient"></div></div>
+<div class="progress" aria-hidden="true"></div>
+<header>
+<a class="brand" href="#intro">جندي على الحدود الرقمية</a>
+<nav aria-label="أقسام العرض">
+<a href="#problem">المشكلة</a><a href="#solution">الحل</a><a href="#features">المميزات</a><a href="#goals">الأهداف</a><a href="#indicators">مؤشرات الأداء</a>
+</nav>
+</header>
+<main>
+<section id="intro" class="slide" aria-labelledby="intro-title">
+<div class="wrap hero">
+<h1 id="intro-title">جندي على <strong>الحدود الرقمية</strong></h1>
+<p class="lead">مبادرة تمنح المواطن معرفة بأساليب الأعداء الهجومية، وتقترح خططًا دفاعية فعّالة.</p>
+<p class="article-34">المادة 34 - (الدفاع عن العقيدة الإسلامية، والمجتمع، والوطن واجب على كل مواطن) <span title="صياغة المبادرة">وكل مواطن سعودي يستخدم وسائل التواصل الاجتماعي هو جندي على الحدود الرقمية.</span></p>
+</div>
+</section>
+
+<section id="problem" class="slide" aria-labelledby="problem-title">
+<div class="wrap">
+<h2 id="problem-title">المشكلة</h2>
+<p class="lead" id="problem-opening">المواطن على الحدود الرقمية لا يملك خططًا واضحة لمواجهة أساليب الأعداء المنهجية التي تستهدف أفكاره وتسعى إلى تشويه حضوره الرقمي.</p>
+</div>
+</section>
+
+<section id="solution" class="slide" aria-labelledby="solution-title">
+<div class="wrap">
+<h2 id="solution-title">الحل</h2>
+<div class="detail-list">
+<article>
+<h3>سلسلة فيديوهات توعوية</h3>
+<p>تحلّل أبرز أساليب الأعداء على وسائل التواصل، وتقدّم للمواطن خططًا دفاعية فعّالة لمواجهتها.</p>
+</article>
+<article>
+<h3>منصة «معيار»</h3>
+<p>أداة مساعدة مفتوحة تراجع المحتوى قبل النشر، وتساعد المستخدم على تحسين امتثاله للأنظمة السعودية.</p>
+</article>
+</div>
+</div>
+</section>
+
+<section id="features" class="slide" aria-labelledby="features-title">
+<div class="wrap">
+<h2 id="features-title">مميزات المبادرة</h2>
+<div class="detail-list">
+<article>
+<h3>خطط دفاعية قابلة للتطبيق</h3>
+<p>تشرح الفيديوهات أساليب الأعداء وتقترح طرقًا فعّالة لمواجهتها.</p>
+</article>
+<article>
+<h3>«معيار» مفتوح المصدر</h3>
+<p>سيُتاح للجميع للمساعدة في مراجعة المنشورات وفق الأنظمة السعودية التي وُضعت لحمايتنا جميعًا.</p>
+</article>
+</div>
+<p class="award"><span aria-hidden="true">✦</span> «معيار» مشروع تخرّج من زمالة الإعلام الرقمي، حائز على لقب التميّز من هيئة تنظيم الإعلام والجامعة السعودية الإلكترونية.</p>
+</div>
+</section>
+
+<section id="goals" class="slide" aria-labelledby="goals-title">
+<div class="wrap">
+<h2 id="goals-title">أهداف المبادرة</h2>
+<ol class="steps">
+<li><span aria-hidden="true">٠١</span><div><strong>كشف أساليب الأعداء والحد من تأثيرها.</strong></div></li>
+<li><span aria-hidden="true">٠٢</span><div><strong>تعزيز امتثال المواطن للأنظمة السعودية على وسائل التواصل الاجتماعي.</strong></div></li>
+</ol>
+</div>
+</section>
+
+<section id="indicators" class="slide" aria-labelledby="indicators-title">
+<div class="wrap">
+<h2 id="indicators-title">مؤشرات الأداء</h2>
+<ol class="steps">
+<li><span aria-hidden="true">٠١</span><div><strong>التفاعل مع المبادرة</strong>رصد حجم التفاعل مع محتوى المبادرة.</div></li>
+<li><span aria-hidden="true">٠٢</span><div><strong>استخدام منصة «معيار»</strong>رصد عدد مرات استخدام المنصة وتحميل الملفات.</div></li>
+<li><span aria-hidden="true">٠٣</span><div><strong>المشاركة في مسابقات المواقف الرقمية</strong>نقدّم سيناريوهات للمواطنين لاختيار التصرف الأنسب، ونرصد عدد المشاركات.</div></li>
+</ol>
+</div>
+</section>
+<section id="closing" class="slide" aria-labelledby="closing-title">
+<div class="wrap">
+<h2 class="closing-title" id="closing-title">
+  <span>كل محتوى له علاقة بالسعودية</span>
+  <span class="closing-topics">سياسي، رياضي، اجتماعي، تعليمي… إلخ</span>
+  <strong>يستهدفك انت</strong>
+</h2>
+<a class="meyar-cta" href="https://tamimimpact.com/#top" target="_blank" rel="noopener noreferrer">جرّب معيار</a>
+</div>
+</section>
+</main>
+<script>
+const sections = Array.from(document.querySelectorAll('.slide'));
+const links = document.querySelectorAll('nav a');
+const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+let scrollFrame;
+let currentSection;
+
+function updateScroll() {
+  scrollFrame = undefined;
+  const available = document.documentElement.scrollHeight - innerHeight;
+  const fraction = available > 0 ? Math.min(1, Math.max(0, scrollY / available)) : 0;
+  const section = fraction === 1
+    ? sections.at(-1)
+    : sections.findLast((item) => item.getBoundingClientRect().top <= innerHeight * .4);
+  document.documentElement.style.setProperty('--scroll', fraction);
+  if (!reducedMotion.matches) {
+    document.documentElement.style.setProperty('--drift-x', `${fraction * 150 - 40}px`);
+    document.documentElement.style.setProperty('--drift-y', `${fraction * -200 + 70}px`);
+  }
+  if (section && section !== currentSection) {
+    currentSection = section;
+    document.body.dataset.tone = section.id;
+    for (const link of links) {
+      if (link.hash === '#' + section.id) link.setAttribute('aria-current', 'location');
+      else link.removeAttribute('aria-current');
+    }
+  }
+}
+
+function scheduleScrollUpdate() {
+  if (scrollFrame === undefined) scrollFrame = requestAnimationFrame(updateScroll);
+}
+
+addEventListener('scroll', scheduleScrollUpdate, { passive: true });
+addEventListener('resize', scheduleScrollUpdate);
+updateScroll();
+</script>
+</body>
+</html>
